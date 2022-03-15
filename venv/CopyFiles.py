@@ -25,11 +25,9 @@ from glob import glob
 dest = 'C:/TSAGI/Docs/test'
 #result = [y for x in os.walk(dest) for y in glob(os.path.join(x[0], '*.csv'))]
 result = [y for x in os.walk(dest) for y in glob(os.path.join(x[0], '*dspH.csv'))]
-
-print( result );
-
-s= result[0];
-print( s );
+#print( result );
+#s= result[0];
+#print( s );
 
 
 import pandas as pd
@@ -59,43 +57,49 @@ def removeFirstWhereNull( arrayx , arrayy):
         else:
             return ;
 
-
+def array_normolize(arrayY):
+    for xt in arrayY:
+        xt=xt -arrayY[0]
 
 len_max = len( mcolors.CSS4_COLORS )
 
 #i =0;
 #s= result[0]
 #if(True):
-for s in result[1:2]:
+#for s in result[1:2]:
+for s in result:
     df = pd.read_csv(s , sep=';',  encoding='latin-1')
-    #print (df)
-
     print (df.columns)
 
-    x = df.iloc[:, 1]
-    print(x)
+    x = df.iloc[:, 1] #[-10:-1]
+    y = df.iloc[:, 2] #[-10:-1]
+
+    #print( "x len = " , len(x), " y len =" , len(y) )
 
     #delete kH from strings
     remove_last = lambda x: [xs[:-2] for xs in x];
 
     x_f= remove_last(x);
     x_tmp= arr_to_floats(x_f);
-
-    #ar_to_float =  lambda x: [ float( xt) for xt in  x];
-    #x_f= ar_to_float( remove_last(x) );
-    print( 'x_f =' ,x_f)
-    print('x_tmp =', x_tmp)
-    # for ( xs in  x ):
-    #     Remove_last = xs[:-1];
-    #     x_f.append( Remove_last );
+    #print( 'x_f =' ,x_f)
 
 
-    y = df.iloc[:, 2]
-    #y_tmp=arr_to_floats(y)[14:-10];
+
     y_tmp=arr_to_floats(y);
-    print('y_tmp =',y_tmp)
-    #print ( y )
-    #plt.plot(x, y   )
+
+    removeFirstWhereNull(x_tmp, y_tmp)
+
+    #array_normolize(y_tmp)
+    array_normolizeY = lambda y: [xs  - y[0] for xs in y];
+    y_tmp =array_normolizeY(y_tmp)
+
+
+    print("x_tmp len = ", len(x_tmp), " y_tmp len =", len(y_tmp))
+    print('x_tmp =', x_tmp)
+    print('y_tmp =',y_tmp )
+    #print('x_tmp =', x_tmp[-5:-1])
+    #print('y_tmp =', y_tmp[-5:-1])
+
     plt.plot(x_tmp, y_tmp   )
     #color = mcolors.CSS4_COLORS[i]
 
@@ -104,11 +108,12 @@ plt.xlabel('sila')
 # naming the y axis
 plt.ylabel('datchik')
 
-    # giving a title to my graph
+# giving a title to my graph
 plt.title(s)
 
 # function to show the plot
 plt.show();
+
 
 
 # for x in df.columns:
