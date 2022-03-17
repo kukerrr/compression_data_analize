@@ -57,9 +57,12 @@ def removeFirstWhereNull( arrayx , arrayy):
         else:
             return ;
 
+norm_x_to_1 = lambda x,mx :[xs/mx  for xs in x];
+
 def array_normolize(arrayY):
     for xt in arrayY:
         xt=xt -arrayY[0]
+
 
 len_max = len( mcolors.CSS4_COLORS )
 
@@ -67,26 +70,28 @@ len_max = len( mcolors.CSS4_COLORS )
 #s= result[0]
 #if(True):
 #for s in result[1:2]:
+
+#кол-во точек в данных
+count_points = []
+
 for s in result:
     df = pd.read_csv(s , sep=';',  encoding='latin-1')
-    print (df.columns)
+    #print (df.columns)
 
     x = df.iloc[:, 1] #[-10:-1]
     y = df.iloc[:, 2] #[-10:-1]
 
+    count_points.append(  len(x) )
     #print( "x len = " , len(x), " y len =" , len(y) )
 
     #delete kH from strings
     remove_last = lambda x: [xs[:-2] for xs in x];
 
-    x_f= remove_last(x);
-    x_tmp= arr_to_floats(x_f);
+    x_f     = remove_last(x);
+    x_tmp   = arr_to_floats(x_f);
     #print( 'x_f =' ,x_f)
 
-
-
     y_tmp=arr_to_floats(y);
-
     removeFirstWhereNull(x_tmp, y_tmp)
 
     #array_normolize(y_tmp)
@@ -94,23 +99,44 @@ for s in result:
     y_tmp =array_normolizeY(y_tmp)
 
 
-    print("x_tmp len = ", len(x_tmp), " y_tmp len =", len(y_tmp))
-    print('x_tmp =', x_tmp)
-    print('y_tmp =',y_tmp )
+    print( "x_temp before = " , x_tmp)
+    #x_tmp = array_normolize(x_tmp)
+
+    max_x = max(x_tmp)
+    print("xt before = ", x_tmp)
+    x_tmp = norm_x_to_1(x_tmp, max_x)
+    print("x_temp after = ",x_tmp)
+
+
+    #print("x_tmp len = ", len(x_tmp), " y_tmp len =", len(y_tmp))
+    #print('x_tmp =', x_tmp)
+    #print('y_tmp =',y_tmp )
     #print('x_tmp =', x_tmp[-5:-1])
     #print('y_tmp =', y_tmp[-5:-1])
 
     plt.plot(x_tmp, y_tmp   )
+
     #color = mcolors.CSS4_COLORS[i]
+
+#descrepency
+
+
+if (False):
+    import scipy.stats
+    import numpy as np
+    print("count points = ",count_points)
+    n_bins = len(count_points)
+    plt.hist(count_points, bins=n_bins)
+    #plt.set_title('hist of points len')
+    plt.show()
+
 
 # naming the x axis
 plt.xlabel('sila')
 # naming the y axis
 plt.ylabel('datchik')
-
 # giving a title to my graph
 plt.title(s)
-
 # function to show the plot
 plt.show();
 
