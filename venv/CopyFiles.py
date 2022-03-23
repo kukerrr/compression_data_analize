@@ -2,7 +2,7 @@
     # shutil.copytree()
     # importing modules
 
-import datetime as dt
+
 
 
 
@@ -15,9 +15,24 @@ if(False):
 # Copying the contents from Source
 # to Destination without some
 # specified files or directories
-    shutil.copytree(src, dest, ignore=shutil.ignore_patterns('*.html', '*.jpeg' ,'test10*' ))
+    shutil.copytree(src, dest, ignore=shutil.ignore_patterns('*.html', '*.jpeg'))
 
 
+
+import os
+from glob import glob
+
+dest = 'C:/TSAGI/Docs/test'
+#result = [y for x in os.walk(dest) for y in glob(os.path.join(x[0], '*.csv'))]
+result = [y for x in os.walk(dest) for y in glob(os.path.join(x[0], '*dspH.csv'))]
+#print( result );
+#s= result[0];
+#print( s );
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 
 #print ( mcolors.CSS4_COLORS )
 #print ( len(mcolors.CSS4_COLORS) )
@@ -42,8 +57,7 @@ def removeFirstWhereNull( arrayx , arrayy):
         else:
             return ;
 
-
-
+norm_x_to_1 = lambda x,mx :[xs/mx  for xs in x];
 
 def array_normolize(arrayY):
     for xt in arrayY:
@@ -64,24 +78,6 @@ def delete_last(arrayX , arrayY):
     if(ind!=0):
         del arrayX[ind:]
         del arrayY[ind:]
-
-
-import os
-from glob import glob
-
-dest = 'C:/TSAGI/Docs/test'
-#result = [y for x in os.walk(dest) for y in glob(os.path.join(x[0], '*.csv'))]
-result = [y for x in os.walk(dest) for y in glob(os.path.join(x[0], '*dspH.csv'))]
-#print( result );
-#s= result[0];
-#print( s );
-
-
-import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
-
-norm_x_to_1 = lambda x,mx :[xs/mx  for xs in x];
 
 len_max = len( mcolors.CSS4_COLORS )
 
@@ -108,9 +104,6 @@ for s in result:
 
     x = df.iloc[:, 1] #[-10:-1]
     y = df.iloc[:, 2] #[-10:-1]
-
-    #x = df.iloc[:, 0] #[-10:-1]
-    #print(x)
 
     count_points.append(  len(x) )
     #print( "x len = " , len(x), " y len =" , len(y) )
@@ -158,47 +151,44 @@ for s in result:
     #y_all.append( y_tmp)
 
     if(False):
-        plt.plot( y_tmp  , x_tmp  );
-
-    plt.plot( x_tmp  , y_tmp  )
-
-    plt.show();
+        plt.plot( y_tmp  , x_tmp  )
 
     #color = mcolors.CSS4_COLORS[i]
-plt.show();
 
-import scipy
-import scipy.interpolate as  sci
-import scipy.stats
-import numpy as np
-#x_new = np.linspace(0.1, int_max_count, num=300)
+#save all points to new data set
 
-y_new =np.arange(0.1, max_y, 0.1)
-
-y_temp =np.arange(0.1, 7.3, 0.1)
-
-
-all_to_teach=[]
 
 
 ####ITS FOR INTERPOLATE!!!
-for pair in all_pairs:
-    x=pair[0]
-    y=pair[1]
-   #print( max(y) )
-   #y_dop = np.arange(0.1, max(y), 0.1)
-    y_add = np.arange(max(y), max_y, 0.1)
+if(False):
+    import scipy
+    import scipy.interpolate as  sci
+    import scipy.stats
+    import numpy as np
 
-    for t in y_add:
-        y.append(t);
-        x.append(0);
+    # x_new = np.linspace(0.1, int_max_count, num=300)
 
-    f1 = sci.interp1d(y, x, kind='linear')
+    y_new = np.arange(0.1, max_y, 0.1)
+    y_temp = np.arange(0.1, 7.3, 0.1)
+    all_to_teach = []
 
-    x_new = f1(y_temp);
-    plt.plot( y_temp, x_new)
+    for pair in all_pairs:
+        x=pair[0]
+        y=pair[1]
+       #print( max(y) )
+       #y_dop = np.arange(0.1, max(y), 0.1)
+        y_add = np.arange(max(y), max_y, 0.1)
 
-    all_to_teach.append([x_tmp, y_tmp])
+        for t in y_add:
+            y.append(t);
+            x.append(0);
+
+        f1 = sci.interp1d(y, x, kind='linear')
+
+        x_new = f1(y_temp);
+        plt.plot( y_temp, x_new)
+
+        all_to_teach.append([x_tmp, y_tmp])
 
 #descrepency
 
