@@ -79,6 +79,27 @@ def delete_last(arrayX , arrayY):
         del arrayX[ind:]
         del arrayY[ind:]
 
+
+def saveToFile( points, fileName):
+    import csv;
+    #with open('C:/TSAGI/Docs/data_out_obuch.csv', 'w') as f:
+    with open(fileName, 'w') as f:
+        # using csv.writer method from CSV package
+        write = csv.writer(f, delimiter=";");
+        # write.writerow(fields)
+        for par1 in points:
+            las_index = len(par1[0])
+            last_x = par1[0][las_index - 1]
+            last_y = par1[1][las_index - 1]
+
+            # for x,y in par1[0] , par1[1]:
+            for n in np.arange(0, las_index):
+                write.writerow([par1[0][n], par1[0][n], last_x, last_y]);
+
+
+
+
+
 len_max = len( mcolors.CSS4_COLORS )
 
 #i =0;
@@ -154,9 +175,60 @@ for s in result:
         plt.plot( y_tmp  , x_tmp  )
 
     #color = mcolors.CSS4_COLORS[i]
+#выборки для обучения и теста:
+alp_x = len(all_pairs);
+import random
+import numpy as np
+obuchenie  = np.arange( 0,alp_x).tolist();
+
+
+sample_len = int( alp_x/5 )
+#print ("sample len:" , sample_len )
+proverka =random.sample(obuchenie, sample_len )
+#print ("random. sample() ", random.sample(tmpp, sample_len ))
+print ("proverka ", proverka )
+#viborka=tmpp.remove( proverka )
+for t in proverka:
+    obuchenie.remove(t )
+print ("obuchenie  ", obuchenie )
+
+
+#obuch= all_pairs[obuchenie]
+#prov = all_pairs[proverka]
+
+
+obuch = [all_pairs[x] for x in obuchenie ]
+prov = [all_pairs[x] for x in proverka ]
+
+#print ("obuch  ", obuch )
+#print ("prov  ", prov )
+
+#SAVE POINTS TO 2 FILES FOR LEARNING
+nttt=0;
+
+if( True):
+    saveToFile(obuch, 'C:/TSAGI/Docs/data_out_obuch.csv')
+    saveToFile(prov, 'C:/TSAGI/Docs/data_out_prov.csv')
+
+
+
+
+if(False):
+    for xt in all_pairs:
+        print ( "xt in x:",len(xt[0]) )
+    for yt in all_pairs :
+        print ( "yt in y:",len(yt[1]) )
 
 #save all points to new data set
+if(False):
+    import csv;
 
+    fields = ['y','x']
+    with open('C:/TSAGI/Docs/data.csv', 'w') as f:
+        # using csv.writer method from CSV package
+        write = csv.writer(f)
+        write.writerow(fields)
+        write.writerows(all_pairs)
 
 
 ####ITS FOR INTERPOLATE!!!
